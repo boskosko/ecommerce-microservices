@@ -55,7 +55,7 @@ Product Payment Notification
 (stock) (Stripe) (email)
 ```
 
-## 🧪 Test the Platform
+## Test the Platform
 
 ### Prerequisites
 Import Postman collection and environment:
