@@ -6,17 +6,21 @@
 ```bash
 cd ecommerce-microservices
 docker compose up -d
-start php artisan migrate in user,product,order,notification service, docker exec -it xxxx-service bash -> app
-#TODO automate this step
 import postman env and collection json for testing
 ```
+### Run Database Migrations
+```bash
+docker exec -it user-service php artisan migrate
+docker exec -it product-service php artisan migrate
+docker exec -it order-service php artisan migrate
+docker exec -it notification-service php artisan migrate
+```
+> **Note:** TODO:Migration automation
 
 **That's it!** All services are now running with automatic:
-- Database migrations
 - RabbitMQ consumers (product sync, order events, payment processing)
-- Email notifications
-- Mailtrap.io https://mailtrap.io/inboxes/
-- Stripe dashboard https://dashboard.stripe.com/xxxxxx/test/payments
+- Email notifications via Mailtrap
+- Stripe payment processing
 
 ### Access Points
 - **User Service**: http://localhost:8001
@@ -62,7 +66,7 @@ Import Postman collection and environment:
 - `postman/E-commerce-Microservices.postman_collection.json`
 - `postman/E-commerce-Microservices.postman_environment.json`
 
-### Testing Flow - import postman JSON collection and env
+### Testing Flow
 
 **1. Create a Product** (Product Service)
 ```
@@ -86,6 +90,22 @@ Use Postman collection: `Order Service → Create Order`
 - **RabbitMQ Dashboard**: http://localhost:15672 (admin/secret) - see events flowing
 - **Stripe Dashboard**: https://dashboard.stripe.com/test/payments - see payment intent
 - **Mailtrap Inbox** - see order confirmation email
+
+
+## Configuration
+
+### Stripe API Key
+Add your Stripe test API key in `services/payment-service/src/main/resources/application.properties`:
+```properties
+stripe.api.key=placeholder
+```
+
+### Mailtrap
+Add your Mailtrap credentials in `services/notification-service/.env`:
+```env
+MAIL_USERNAME=your_mailtrap_username
+MAIL_PASSWORD=your_mailtrap_password
+```
 
 ## 📝 License
 MIT
